@@ -1,194 +1,245 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-/* CSS */
-
-.sidebar {
-
-  position: fixed;
-  height: 100%;
-  width: 240px;
-  background-color: #222;
-  color: #eee;
-  font-family: monospace;
-  padding: 2rem;
+/* Reset CSS */
+/* Apply a basic reset to remove default styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
   
-  .sidebar div {
-  padding: 8px;
-  font-size: 40px;
-  display: block;
+  /* Responsive Layout */
+  /* Set a default font size and line height for better scaling */
+  html {
+    font-size: 16px;
+    line-height: 1.5;
   }
   
-  .body-text {
-  margin-left: 150px;
-  font-size: 18px;
+  /* Media Queries */
+  /* Define media queries to adjust styles based on screen sizes */
+  /* For example, change layout and font size for smaller screens */
+  
+  /* Small devices (phones) */
+  @media only screen and (max-width: 767px) {
+    /* Add your responsive styles here */
   }
+  
+  /* Medium devices (tablets) */
+  @media only screen and (min-width: 768px) and (max-width: 1023px) {
+    /* Add your responsive styles here */
+  }
+  
+  /* Large devices (desktops and laptops) */
+  @media only screen and (min-width: 1024px) {
+    /* Add your responsive styles here */
+  }
+  
 
-  .workspace {
-    position: relative;
-    top: 40px;
-    left: 420px;  
-    width: 600px;
+  .sidebar {
+    font-family: 'Bungee Hairline', Monospace;
+    position: fixed;
+    top: 0;
+    bottom:0;
+    left: -210px; /* Move the sidebar off the screen initially */
+    width: 260px;
     height: 100%;
+    transition: left ease 0.5s; /* Transition the left property */
+    background-color: #444;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 9999;
+  }
+
+  .sidebar:hover {
+    background-color: #444;
+    cursor: pointer;
+    left: 0; /* Move the sidebar to the left edge of the screen on hover */
+  }
+
+  /* Sidebar content container */
+  .sidebar-content {
+    background-color: #444;
+    display: flex;
+    flex-direction: column;
+    height: 35%;
+    padding-top: 10%;
+    justify-content: flex-start; /* Align content to the top */
+    position: relative;
+  }
+
+  /* List items (buttons) */
+  .sidebar-content li {
+    background-color: #444;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* Links */
+  .sidebar-content li a {
+    font-size: large;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 8%;
+    padding-right: 1.5%;
+    text-decoration: none;
+    color: wheat;
+    display: flex; /* Use flexbox */
+    align-items: center; /* Center the content vertically within the flex container */
+  }
+  
+  /* Styling on hover */
+  .sidebar-content li a:hover {
+    background-color: #444;
+    color: #fff;
+    cursor: pointer;
+    
+  }
+  
+  /* SVG Icon */
+  .sidebar-content li svg {
+    margin-left: auto; /* Push the SVG icon to the right, aligning it at the end of the flex container */
+    padding-right: 5px;
+    font-size: 2em;
+  }
+
+  .logoutbutton {
+    font-size: large;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 26%;
+    padding-right: 1%;
+    text-decoration: none;
+    color: wheat;
+    display: flex; /* Use flexbox */
+    align-items: center;
     
   }
 
-  .workspace div {
-    display: flex;
-    justify-content: center;
-    }
-
-  .items-table {
-    background-color: #924646;
-    align-self: center;
+  .logoutbuttonbox :hover{
+    cursor: pointer;
+    color: #fff;
   }
 
-  table {
+  .logoutbutton a svg:hover{
+    color: #fff;
+  }
+
+  .logoutbutton:hover svg {
+    color: #fff;
+  }
+
+  .logoutbutton svg{
+    margin-left: auto;
+    font-size: 2.5em;
+    color: wheat;
+  }
+
+  
+  .workspace {
+    min-height: 100vh;
+    
+    position: relative;
+    margin-left: 50px; /* Initial margin for the workspace */
+    transition: margin-left ease 0.5s; /* Transition the margin-left property */
+  }
+  
+  .sidebar:hover ~ .workspace {
+    margin-left: 260px; /* Move the workspace to the right when the sidebar is hovered */
+    filter: blur(.5px);
+    
+  }
+
+
+
+
+  .shop-list-pantry {
+    position: relative;
     width: 100%;
+    height: calc(100vh - 400px);
+    display: flex; /* Use flexbox to arrange the elements vertically */
+    flex-direction: column; /* Arrange the elements vertically */
+    /* justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
   }
   
-  th {
-    height: 70px;
+  
+
+  .shop-list-pantry .headline {
+    margin: 1em;
   }
 
-  div.scrollmenu {
-    background-color: #333;
-    overflow: auto;
-    white-space: nowrap;
+  .itemstable {
+    background-color: #f5deb3;
+    width: 900px;
+  }
+
+  .recipewindow {
+    position: fixed; /* Position the child div absolutely */
+    bottom: 0; /* Position it at the bottom of the parent div */
+    width: 100%; /* Adjust the width as needed */
+    max-height: 400px; /* Set a fixed height for the scrollable container */
+    overflow: auto; /* Add scrollbars when content overflows */
+    background-color: lightgray; /* Just for visualization, you can remove this */
+    display: flex; /* Use flexbox to arrange the elements horizontally */
+    justify-content: center; /* Center the .scrollmenu horizontally */
+    align-items: center; /* Center the .scrollmenu vertically */
+  }
+
+  .scrollmenu {
+    display: flex; /* Use flexbox to arrange the .scrollitem elements horizontally */
+    flex-wrap: nowrap; /* Prevent the .scrollitem elements from wrapping to the next line */
+    gap: 10px; /* Adjust the gap between .scrollitem elements as needed */
+    overflow: auto; /* Add scrollbars when content overflows */
+  }
+
+  .scrollitem {
+    width: 190px;
+    height: 190px;
+    flex-shrink: 0;
+    background-color: #008080;
+  }
+
+  .scrollmenu::-webkit-scrollbar {
+    display: none;
+  }
+
+  .table-input{
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 36px;
+    box-sizing: content-box;
+    background: none;
+    padding: 0;
+    margin: 2px;
+    font-size: large;
+  }
+
+  .table-row {
+    height: 36px;
+  }
+
+  .table-cell {
+    position: relative;
   }
   
-  div.scrollmenu a {
-    display: inline-block;
-    color: white;
-    text-align: center;
-    padding: 14px;
-    text-decoration: none;
-  }
-  
-  div.scrollmenu a:hover {
-    background-color: #777;
-  }
-
-  .page {
-    height: 100%;
+  .dropdown-window {
+    position: absolute;
+    top: 100%; /* Position the dropdown below the input */
+    left: 0;
+    right: 0; /* Set both left and right to 0 to center the dropdown */
+    background-color: rgb(128, 219, 235);
+    z-index: 999; /* Make sure it appears on top of other elements */
+    width: 100%; /* Set the width to 100% to match the width of the input */
+    border: 1px solid #ccc;
   }
 
-.speech {
-   font-size: 1.1em;
-  color: #fff;
-  background: #a53d38;
-  position: absolute;
-  padding: 20px;
-  border-radius: 10px;
-  margin: 50px auto;
-  max-width: 320px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
+  .dropdown-cell {
+    background-color:  #444;
+    color: #fff;
+  }
 
-.speech::after {
-  content: "";
-  border: 20px solid transparent;
-  position: absolute;
-}
- 
-
-.top.speech::after {
-  border-bottom-color: #a53d38;
-  border-top: 0;
-  top: -20px; left: 50%;
-  margin-left: -20px;
-}
-
- 
-
-
-.headline {
-  text-align: center;
-  margin-bottom: 1em;
-}
-
-.shopping-table-container {
-  margin: 0 auto;
-  max-width: 800px;
-}
-
-
-.button-container {
-  display: inline;
-}
-
-.button-container button {
-  margin-right: 5px;
-}
-
-
-.text-container {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.import-window {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-.import-inner-window {
-  display: block;
-  margin-bottom: 10px;
-
-}
-
-
-.login-register-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  min-height: 100vh;
-}
-
-.register-wrapper {
-  flex-direction: column;
-}
+  .dropdown-cell:hover{
+    background-color: teal;
+    color: wheat;
+  }

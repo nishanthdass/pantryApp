@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-function PantryRow({ pantry }) {
-    const [myitem, setItem] = useState(pantry.name);
+function PantryRow({ pantry, onDelItem }) {
+    const [myitem, setItem] = useState(pantry.item);
     const [quantity, setQuantity] = useState(pantry.quantity);
     const [unit, setUnit] = useState(pantry.unit);
 
@@ -17,6 +17,10 @@ function PantryRow({ pantry }) {
         setUnit(e.target.value);
     };
 
+    const delItem = async (itemId) => {
+        onDelItem(itemId)
+    }; 
+
     return (
         <tr className='itemrow'>
             <td>
@@ -29,7 +33,7 @@ function PantryRow({ pantry }) {
                 <input type="text" value={unit} onChange={handleUnitChange} />
             </td>
             <td>
-                <button>Delete</button>
+                <button onClick={()=>delItem(pantry._id)} >Delete</button>
             </td>
         </tr>
     );

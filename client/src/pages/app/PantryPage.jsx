@@ -8,12 +8,10 @@ export const PantryPage = (props) => {
 
     return (
         <>
-        <div className="workspace">
-        <Day/>
-            <div className="shopping-table-container">
-                <PantryTable pantrys={pantrys} />
+            <div className="shop-list-pantry">
+                <PantryTable />
             </div>
-        </div>
+        
         </>
     )
 }

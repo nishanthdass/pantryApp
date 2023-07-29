@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import axios from 'axios'
 import { Link } from 'react-router-dom';
 
 
@@ -9,8 +10,6 @@ export const Login = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(emailuser)
-        console.log(password)   
         props.onLogin(emailuser, password);
     }
 

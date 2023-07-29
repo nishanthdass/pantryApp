@@ -10,4 +10,29 @@ const items = [
 	{ name: 'Chicken', quantity: 1 , unit: "lb"},
 ];
 
-export default items;
+const recipes = [
+    { name: 'Pizza'},
+	{ name: 'Pasta'},
+	{ name: 'Linguine'},
+	{ name: 'Chocolate cake'},
+	{ name: 'Chicken Curry'},
+	{ name: 'Curry Chicken'},
+	{ name: 'Milk Steak?'},
+	{ name: 'Chocolate cake'},
+	{ name: 'Chicken Curry'},
+	{ name: 'Curry Chicken'},
+	{ name: 'Milk Steak?'},
+	{ name: 'Pizza'},
+	{ name: 'Pasta'},
+	{ name: 'Linguine'},
+	{ name: 'Chocolate cake'},
+	{ name: 'Chicken Curry'},
+	{ name: 'Curry Chicken'},
+	{ name: 'Milk Steak?'},
+	{ name: 'Chocolate cake'},
+	{ name: 'Chicken Curry'},
+	{ name: 'Curry Chicken'},
+	{ name: 'Milk Steak?'},
+];
+
+export { items, recipes };

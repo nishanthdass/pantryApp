@@ -1,38 +1,113 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShoppingRow from './ShoppingRow';
-import { useNavigate } from 'react-router-dom';
-import { SelectDrop } from './Select';
+import axios from 'axios';
+import AddItemTable from './Additem';
 
-function ShoppingTable({ items }) {
-  const [item, setItem] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [unit, setUnit] = useState('');
+function ShoppingTable() {
 
-  const navigate = useNavigate();
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [data, setData] = useState([]);
 
-  const handleChange = (selectedOptions) => {
-    setSelectedOptions(selectedOptions);
-  };
+  const token = localStorage.getItem("token");
+  const headers = { Authorization: `Bearer ${token}`,};
 
-  const options = [
-    { value: 'option1', label: 'Apple' },
-    { value: 'option1', label: 'Apple Cider Vinegar' },
-    { value: 'option1', label: 'Apple Juice' },
-    { value: 'option1', label: 'Appletini' },
-    { value: 'option2', label: 'Apricot' },
-    { value: 'option3', label: 'etc' },
-    // Add more options as needed
-  ];
+  const getItems = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/shopping-loaditems",
+        { headers }
+      );
+      setData(response.data); 
+    }
+    catch(error) {
+      console.log('Error finding item:', error);
+    }
+  }
 
-  const addItem = async () => {
-    console.log(item);
-    navigate('/shopping');
-  };
+  const addRows = (dataArray, minRows) => {
+    const emptyRow = { item: '', quantity: '', unit: ''};
+    const missingRows = Math.max(minRows - dataArray.length, 0);
+    const emptyRows = Array.from({ length: missingRows }, () => emptyRow);
+    return dataArray.concat(emptyRows);
+  }
 
+  useEffect(() => {
+    getItems();
+    
+    return () => {
+    };
+  }, []);
+
+
+   const handleAddItem = async (item, quantity, unit) => {
+    try {
+      // Create a new item object with the provided data
+      const newItem = {
+        item: item,
+        quantity: quantity,
+        unit: unit,
+      };
+            
+      const addItem_response = await axios.post(
+        "http://localhost:5000/shopping-additem", newItem,{ headers}
+          );
+
+          getItems();
+        } catch (error) {
+          // Handle errors if the server request fails
+          console.log('Error adding item:', error);
+        }
+    try {
+      // find all items in pantry and shopping list
+      const findItems_response = await axios.get(
+        "http://localhost:5000/shopping-suggest-req",{ headers}
+          );
+      const itemObjectsList = findItems_response.data
+      const itemList = itemObjectsList.map(item => item.item);
+      console.log(itemList)
+        } catch (error) {
+          console.log('Error finding item:', error);
+        }   
+      };
+
+      const handleDelItem = async (itemId) => {
+        try {
+          // Create a new object with the itemId as the value for the key "itemId"
+          const requestData = { itemId: itemId };
+      
+          const response = await axios.delete(
+            "http://localhost:5000/shopping-delitem",
+            {
+              data: requestData, // Send the itemId in the request body
+              headers: headers // Assuming you have the headers defined elsewhere
+            }
+          );
+      
+          console.log("Item deleted successfully:", itemId);
+          getItems(); // Refresh the items after deletion
+        } catch (error) {
+          // Handle errors if the server request fails
+          console.error("Error deleting item:", error);
+        }
+      };
+
+      const handleMoveItem = async (itemId) =>  {
+        try {
+          // Create a new object with the itemId as the value for the key "itemId"
+          const requestData = { itemId: itemId };
+          const response = await axios.post(
+            "http://localhost:5000/shopping-moveitem", requestData, {headers}
+          );
+          console.log("Item moved successfully:", itemId);
+          getItems(); // Refresh the items after deletion
+        } catch (error) {
+          // Handle errors if the server request fails
+          console.error("Error moving item:", error);
+        }
+      };
+      
+      
   return (
-    <div>
-      <table className="items-table">
+    <>
         <thead>
           <tr>
             <th>Item</th>
@@ -41,38 +116,14 @@ function ShoppingTable({ items }) {
             <th>Options</th>
           </tr>
         </thead>
-        <tbody>
-          {items.map((item, i) => (
-            <ShoppingRow item={item} key={i} />
+        <tbody className="table-body">
+          {data.map((useritem) => (
+            <ShoppingRow useritem={useritem} key={useritem._id} onDelItem={handleDelItem} onMoveItem={handleMoveItem} />
           ))}
-          <tr>
-            <td>
-              <SelectDrop options={options} onChange={handleChange} />
-            </td>
-            <td>
-              <input
-                type="number"
-                value={quantity}
-                placeholder="Enter quantity here"
-                onChange={(e) => setQuantity(e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                value={unit}
-                placeholder="Enter unit here"
-                onChange={(e) => setUnit(e.target.value)}
-              />
-            </td>
-            <td>
-              <button onClick={addItem}>Add to list</button>
-            </td>
-            
-          </tr>
+          <AddItemTable onAddItem={handleAddItem} />
         </tbody>
-      </table>
-    </div>
+      
+    </>
   );
 }
 

@@ -8,10 +8,8 @@ export const Register = (props) => {
     const [password, setPassword] = useState('');
 
     const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(email)
-        console.log(username)
-        console.log(password)    
+        event.preventDefault();  
+        props.onRegister(email, username, password)
     }
 
 

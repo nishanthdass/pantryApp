@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-function ShoppingRow({ item }) {
-    const [myitem, setItem] = useState(item.name);
-    const [quantity, setQuantity] = useState(item.quantity);
-    const [unit, setUnit] = useState(item.unit);
+function ShoppingRow({ useritem, onAddItem, onDelItem, onMoveItem }) {
+    const [item, setItem] = useState(useritem.item);
+    const [quantity, setQuantity] = useState(useritem.quantity);
+    const [unit, setUnit] = useState(useritem.unit);
 
     const handleItemChange = (e) => {
         setItem(e.target.value);
@@ -17,10 +17,18 @@ function ShoppingRow({ item }) {
         setUnit(e.target.value);
     };
 
+    const delItem = async (itemId) => {
+        onDelItem(itemId)
+    }; 
+
+    const moveItem = async (itemId) => {
+        onMoveItem(itemId)
+    }; 
+
     return (
         <tr className='itemrow'>
             <td>
-                <input type="text" value={myitem} onChange={handleItemChange} />
+                <input type="text" value={item} onChange={handleItemChange} />
             </td>
             <td>
                 <input type="text" value={quantity} onChange={handleQuantityChange} />
@@ -30,8 +38,8 @@ function ShoppingRow({ item }) {
             </td>
             <td>
                 <div className="button-container">
-                    <button>Delete</button>
-                    <button>Purchased</button>
+                    <button onClick={()=>delItem(useritem._id)}>Delete</button>
+                    <button onClick={()=>moveItem(useritem._id)}>Purchased</button>
                 </div>
             </td>
         </tr>
