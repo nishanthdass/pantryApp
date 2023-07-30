@@ -20,4 +20,5 @@ How to RECEIVE a decrypted id from token API:
 -	Token API will respond to request for a decrypted ID in the data section of the response. Users can find the token in response.data.id
 
 UML sequence diagram:
-![CS 361 Assingment 9](https://github.com/nishanthdass/pantryapp/assets/19554568/63a31843-063e-431c-a0e0-7c8e2bf3b3e9)
+![UML assignment 9](https://github.com/nishanthdass/pantryapp/assets/19554568/074934bc-3071-49dc-8cb4-762a531ff890)
+
