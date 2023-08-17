@@ -8,22 +8,23 @@ import {Register} from './pages/login_register/Register';
 import {Home} from './pages/app/Home';
 import {PantryPage} from './pages/app/PantryPage';
 import {AdvancedPage} from './pages/app/AdvancedPage';
+import { RecipesProvider } from './pages/components/RecipeContext';
+import { PopupProvider } from "./pages/components/PopupContext";
 
 
 function App() {
-
   const [loginRegisterForm, setLoginRegisterForm] = useState('loginPage')
   const [loggedIn, setLoggedIn] = useState(false);
 
+  // find user token from browser on initial render
   useEffect(() => {
-    // Check if a valid JWT exists in local storage
     const token = localStorage.getItem('token');
     if (token) {
-      // You may want to verify the token on the server-side as well for added security
       setLoggedIn(true);
     }
   }, []);
 
+  // sets state for login/register sequence
   const toggleForm = (formName) => {
     setLoginRegisterForm(formName);
   }
@@ -34,18 +35,15 @@ function App() {
         emailuser,
         password,
       });
-      // Check the status code and handle the response data accordingly
       if (response.status === 200) {
-        console.log("Login successful");
         localStorage.setItem('token', response.data.token);
-        // Set the loggedIn state to true
         setLoggedIn(true);
-      } else {
+      } 
+      else {
         console.log("Login failed:", response.data.error);
-        // Handle unsuccessful login, e.g., display an error message to the user
       }
-    } catch (error) {
-      // Handle API call errors
+    } 
+    catch (error) {
       console.log(error);
     }
   };
@@ -57,17 +55,14 @@ function App() {
         username,
         password,
       });
-
-    } catch (error) {
-      // Handle API call errors
+    } 
+    catch (error) {
       console.log(error);
     }
   };
 
   const handleLogout = () => {
-    // Clear the JWT from local storage
     localStorage.removeItem('token');
-    // Set the loggedIn state to false
     setLoggedIn(false);
   };
   
@@ -78,12 +73,16 @@ function App() {
         <Sidebar onLogout={handleLogout}/>
         </div>
         <div className="workspace">
-        <Routes>
-          <Route path="/" element={<Navigate to="/shopping" />}/>
-          <Route path="/shopping" element={<Home />} />
-          <Route path="/pantry" element={<PantryPage />} />
-          <Route path="/advanced" element={<AdvancedPage />} />
-        </Routes>
+        <RecipesProvider>
+          <PopupProvider>
+              <Routes>
+                  <Route path="/" element={<Navigate to="/shopping" />}/>
+                  <Route path="/shopping" element={<Home />} />
+                  <Route path="/pantry" element={<PantryPage />} />
+                  <Route path="/advanced" element={<AdvancedPage />} />
+              </Routes>
+          </PopupProvider>
+        </RecipesProvider>
         </div>
       </div>
 

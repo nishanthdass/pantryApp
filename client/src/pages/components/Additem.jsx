@@ -43,10 +43,6 @@ export const AddItemTable = (props) => {
         setDrop(false);
       }, 350); // Use a timeout to give enough time to click on the dropdown
     };
-  
-    const handleInputFocus = () => {
-      setDrop(true);
-    };
 
 
 

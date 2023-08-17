@@ -10,6 +10,7 @@ import { spawn } from 'child_process';
 import {extractIngredients, extractItemCsv} from './data/recipe_dataset/parse_recipies.mjs'
 import axios from 'axios';
 import upload from './tools/multer.mjs';
+import { error } from 'console';
 
 const PORT = process.env.PORT || 5000; // Use port 5000 as a fallback if PORT is not defined in the environment variables
 
@@ -21,13 +22,11 @@ app.use(cors());
 
 async function callJwt(objectId, time) {
   try {
-    console.log("Post request made from Client Server: ", objectId, time)
     const response = await axios.post('http://localhost:8000/tokenapi', { objectId: objectId, time: time }, {
       headers: {
         'Content-Type': 'application/json', 
       },
     });
-    console.log("Response received from Token API by Client Server: ", response.data)
     return response.data;
   } catch (error) {
     throw new Error(error);
@@ -36,14 +35,12 @@ async function callJwt(objectId, time) {
 
 async function callJwtVerfiy(token_Id) {
   try {
-    console.log("Post request made from Client Server: ", token_Id)
     const response = await axios.post('http://localhost:8000/tokenapi/verify', { token_Id }, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    console.log("Response received from Token API by Client Server: ", response.data.objectId)
-    return response.data.objectId;
+    return response.data.id;
   } catch (error) {
     throw new Error(error);
   }
@@ -52,7 +49,6 @@ async function callJwtVerfiy(token_Id) {
 
 app.post('/login', asyncHandler(async (req, res) => {
   try {
-    
     const emailFilter = { email: req.body.emailuser };
     const emailProjection = { email: 1 };
     const emailLimit = 1;
@@ -145,7 +141,7 @@ app.post('/shopping-additem', asyncHandler(async (req, res) => {
     const object_Id = await callJwtVerfiy(token)
     const filter = { user: object_Id };
 
-    const newItem = await shoppinglist.createItem(req.body.item, req.body.quantity, req.body.unit, object_Id);
+    const newItem = await shoppinglist.createItem(req.body.rowId ,req.body.item, req.body.quantity, req.body.unit, object_Id);
     res.status(201).json({ newItem });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
@@ -162,7 +158,18 @@ app.get('/shopping-suggest-req', asyncHandler(async (req, res) => {
     const findListItems = await shoppinglist.findItems(filter);
     const findPantryItems = await pantry.findItems(filter);
     const allItems = [...findListItems, ...findPantryItems]
-    res.status(201).json(allItems);
+    
+    const filteredItems = allItems.map(item => item.item)
+    const urlAddress = 'http://localhost:4000/'
+    const getCallAddress = urlAddress + filteredItems.join(',');
+    
+    try {
+      const response = await axios.get(getCallAddress);
+      res.status(201).json(response.data);
+    } catch (error) {
+      throw new Error(error);
+    }
+    
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }

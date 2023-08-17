@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 // Define the shopping list schema
 const shoppingListSchema = mongoose.Schema({
+  rowId:{ type: Number, required: true },
   item: { type: String, required: true },
   quantity: { type: String, required: true },
   unit: { type: String, required: true },
@@ -14,9 +15,9 @@ const Shoppinglists = mongoose.model('Shoppinglists', shoppingListSchema);
 
 
 // Function to create a new item in the shopping list
-const createItem = async (item, quantity, unit, user) => {
+const createItem = async (rowId, item, quantity, unit, user) => {
   try {
-    const newItem = new Shoppinglists({ item, quantity, unit , user});
+    const newItem = new Shoppinglists({rowId, item, quantity, unit , user});
     return await newItem.save();
   } catch (error) {
     console.error('Error creating item:', error.message);

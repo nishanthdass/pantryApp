@@ -12,6 +12,21 @@
     font-size: 16px;
     line-height: 1.5;
   }
+
+  /* Hide the scrollbar */
+  body {
+    scrollbar-width: none; /* Firefox */
+  }
+
+  body::-webkit-scrollbar {
+    width: 0; /* Remove default scrollbar on webkit-based browsers */
+  }
+
+  /* Set overflow to auto to enable scrolling */
+  body {
+    overflow: auto;
+  }
+
   
   /* Media Queries */
   /* Define media queries to adjust styles based on screen sizes */
@@ -31,7 +46,8 @@
   @media only screen and (min-width: 1024px) {
     /* Add your responsive styles here */
   }
-  
+
+
 
   .sidebar {
     font-family: 'Bungee Hairline', Monospace;
@@ -112,7 +128,6 @@
     color: wheat;
     display: flex; /* Use flexbox */
     align-items: center;
-    
   }
 
   .logoutbuttonbox :hover{
@@ -135,54 +150,65 @@
   }
 
   
-  .workspace {
-    min-height: 100vh;
-    
-    position: relative;
-    margin-left: 50px; /* Initial margin for the workspace */
-    transition: margin-left ease 0.5s; /* Transition the margin-left property */
-  }
+
   
   .sidebar:hover ~ .workspace {
     margin-left: 260px; /* Move the workspace to the right when the sidebar is hovered */
-    filter: blur(.5px);
-    
+    filter: blur(.5px); 
   }
-
-
-
 
   .shop-list-pantry {
     position: relative;
     width: 100%;
-    height: calc(100vh - 400px);
     display: flex; /* Use flexbox to arrange the elements vertically */
     flex-direction: column; /* Arrange the elements vertically */
     /* justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
   }
   
-  
-
   .shop-list-pantry .headline {
     margin: 1em;
   }
 
+
+  .itemstablemin,
   .itemstable {
     background-color: #f5deb3;
     width: 900px;
   }
 
-  .recipewindow {
-    position: fixed; /* Position the child div absolutely */
-    bottom: 0; /* Position it at the bottom of the parent div */
-    width: 100%; /* Adjust the width as needed */
-    max-height: 400px; /* Set a fixed height for the scrollable container */
-    overflow: auto; /* Add scrollbars when content overflows */
-    background-color: lightgray; /* Just for visualization, you can remove this */
-    display: flex; /* Use flexbox to arrange the elements horizontally */
-    justify-content: center; /* Center the .scrollmenu horizontally */
-    align-items: center; /* Center the .scrollmenu vertically */
+
+  /* {menu? "tablecontainer":"tablecontainermin" */
+
+  .tablecontainermin,
+  .tablecontainer{
+    height: 90.5vh;
+    overflow-y: auto;
+    transition: height ease 0.5s;
+    z-index: 1;
+  }
+
+  .tablecontainermin{
+    height: 70vh;
+    margin-bottom: 4px;
+    overflow-y: auto;
+    transition: height ease 0.5s;
+    
+  }
+
+
+  .tablecontainermin::-webkit-scrollbar {
+    display: none;
+  } 
+
+  .tablecontainer::-webkit-scrollbar {
+    display: none;
+  } 
+
+  .horizontal-split{
+    display: grid;
+    grid-template-columns: .3fr 1fr;
+    grid-gap: 20px;
   }
 
   .scrollmenu {
@@ -190,18 +216,127 @@
     flex-wrap: nowrap; /* Prevent the .scrollitem elements from wrapping to the next line */
     gap: 10px; /* Adjust the gap between .scrollitem elements as needed */
     overflow: auto; /* Add scrollbars when content overflows */
-  }
+    overflow-x: scroll; /* Allow horizontal scrolling */
+}
 
-  .scrollitem {
+.scrollitem {
+    border-radius: 5px 5px 0px 0px;
     width: 190px;
     height: 190px;
     flex-shrink: 0;
     background-color: #008080;
-  }
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+
+.scrollitem.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scrollitem.removing {
+  opacity: 0;
+  max-height: 0;
+  padding: 0;
+}
+
+.scrollitem-content{
+  cursor: pointer;
+  top: 10px;
+  border-radius: 10px;
+  position: relative;
+  border: 1px solid;
+  margin: auto;
+  border-color: rgb(255, 255, 255);
+  width: 90%;
+  height: 90%;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.scrollitem-content-text{
+  font-family: 'Bungee Hairline', Monospace;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  padding: 10px;
+}
 
   .scrollmenu::-webkit-scrollbar {
     display: none;
   }
+
+  .bottom-tab-null,
+  .bottom-tab {
+    font-family: 'Bungee Hairline', Monospace;
+    width: 240px;
+    background-color: #444;
+    height: 45px;
+    position: absolute; /* Use absolute positioning */
+    bottom: 0; /* Position it at the bottom of the parent */
+    right: 0%;;
+    z-index: 2;
+    color: #f5deb3;
+    display: flex; /* Use flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+  }
+
+  .bottom-tab:hover{
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .bottom-tab-null{
+    color: gray;
+    cursor: not-allowed;
+  }
+
+  .bottom-tab-null:hover{
+    color: darkgray;
+    cursor: not-allowed;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0); 
+    }
+  }
+  
+  @keyframes slideDown {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+  
+  .slide-up {
+    animation: slideUp 0.5s ease-out; /* Adjust the duration and timing function as needed */
+  }
+  
+  .slide-down {
+    animation: slideDown 0.5s ease-out; /* Adjust the duration and timing function as needed */
+  } 
+
+  .workspace {
+    /* overflow: hidden; */
+    height: 100vh;
+    max-height: 100vh;
+    position: relative;
+    margin-left: 50px; /* Initial margin for the workspace */
+    transition: margin-left ease 0.5s; /* Transition the margin-left property */
+  }
+  
 
   .table-input{
     border: none;
@@ -216,7 +351,7 @@
   }
 
   .table-row {
-    height: 36px;
+    height: 46px;
   }
 
   .table-cell {
@@ -242,4 +377,47 @@
   .dropdown-cell:hover{
     background-color: teal;
     color: wheat;
+  }
+
+  .recipe-pop-up{
+    max-width: 100%;
+  }
+
+  .import-window{
+    position: relative;
+    width: 70%;
+    display: grid;
+  }
+
+
+  .bubble {
+    width: 400px;
+    margin: 5px auto;
+    background: #00bfb6;
+    padding: 5px;
+    text-align: center;
+    font-weight: 600;
+    color: #fff;
+    position:relative;
+  }
+
+  .bubble::after {
+    content: "";
+    border: 20px solid transparent;
+    position: absolute;
+  }
+
+
+  .bubble::after {
+    border-top-color:#00bfb6;
+    border-bottom: 0;
+    bottom: -20px; left: 50%;
+    margin-left: -20px;
+  }
+  
+  .popup {
+    position: absolute;
+    bottom: 6%;
+    right: .5%;
+    z-index: 3;
   }
